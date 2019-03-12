@@ -54,7 +54,8 @@ This is the hw02 sample. Please follow the steps below.
 - [ ] **If you volunteer to give the presentation next week, check this.**
 
 --------------------
-Emdedded_HW02
+# Emdedded_HW02
+
 ## 1. 實驗題目
 
 比較push及pop功能中Regist順序是否影響輸出結果
