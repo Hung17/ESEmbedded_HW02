@@ -51,8 +51,109 @@ This is the hw02 sample. Please follow the steps below.
 
 --------------------
 
-- [x] **If you volunteer to give the presentation next week, check this.**
+- [ ] **If you volunteer to give the presentation next week, check this.**
 
 --------------------
+Emdedded_HW02
+## 1. 實驗題目
+比較push及pop功能中Regist順序是否影響輸出結果
+比較`push {r0, r1, r2}` 與 `push {r2, r0, r1}`是否一樣
+## 2. 實驗步驟
 
-Please take your note here.
+`.syntax unified
+
+.word 0x20000100
+.word _start
+
+.global _start
+.type _start, %function
+_start:
+
+	//
+	//mov # to reg
+	//
+	movs	r0,	#100
+	movs	r1,	#200
+	movs	r2,	#300
+
+	//
+	//push
+	//
+	push	{r0,	r1,	r2}
+
+	//
+	//pop
+	//
+	pop	{r3	,r4	,r5}
+
+	//
+	//clean reg
+	//
+	movs	r3,	#0
+	movs	r4,	#0
+	movs	r5,	#0
+
+	//
+	//mov # to reg
+	//
+	movs	r0,	#1
+	movs	r1,	#2
+	movs	r2,	#3
+
+	//
+	//push
+	//
+	push	{r2,	r0,	r1}
+
+	//
+	//pop
+	//
+	pop	{r5	,r4	,r3}
+
+	//
+	//b bl
+	//
+	b	label01
+
+
+sleep:
+	b	sleep
+
+label01:
+		nop
+		nop
+		bx lr`
+
+1.將100,200,300放入r0,r1,r2
+![](https://github.com/Hung7/ESEmbedded_HW02/image/1.png)
+2.將 r0,r1,r2 push進入stack
+3.依照sp發現資料向下堆疊到0x200000f4，輸入x 0x200000f4指令確認stack內容
+![](https://github.com/Hung7/ESEmbedded_HW02/image/2.png)
+4.將stack內容pop出來並存入r3,r4,r5
+![](https://github.com/Hung7/ESEmbedded_HW02/image/3.png)
+5.將r3,r4,r5資料清為0，將1,2,3的值存入r0,r1,r2(更換資料觀察stack內資料變化)
+![](https://github.com/Hung7/ESEmbedded_HW02/image/4.png)
+6.改變register順序，將 r2,r0,r1 push進入stack
+7.依照sp發現資料向下堆疊到0x200000f4，輸入x 0x200000f4指令確認stack內容
+![](https://github.com/Hung7/ESEmbedded_HW02/image/5.png)
+8.將stack內容pop出來並更改pop順序存入r5	,r4	,r3
+![](https://github.com/Hung7/ESEmbedded_HW02/image/6.png)
+## 3. 結果與討論
+從實驗中（step3 and step7）可以發現不論register的順序，執行push時，會依照register號碼大小，由大至小，依序將register的值push進stack
+
+Stack是往下長的，register的內容由register number愈大的先放進stack
+	|		0x20000100	0x00000000
+	|		0x200000fc	0x0000012c	//register 2 data		|
+	|		0x200000f8	0x000000c8	//register 1 data		| （push進來的順序）
+	V		0x200000f4	0x00000064	//register 0 data		V
+
+
+而相反的(step4 and step8)，可以發現不論register的順序，執行pop時，會依照register號碼大小，由小至大，依序將stack位置最低的值的值pop至register
+
+Stack是往下長的，pop時,存放資料中位置最低的stack將資料pop出來存入register,存入順序是依據register number大小，由小至大，存入資料
+	|		0x20000100	0x00000000
+	|		0x200000fc	0x0000012c	//pop給register 5 data		^
+	|		0x200000f8	0x000000c8	//pop給register 4 data		| (pop出stack的順序)
+	V		0x200000f4	0x00000064	//pop給register 3 data		|
+
+結論:push及pop功能中Regist順序並不會影響輸出結果
