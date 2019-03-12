@@ -129,31 +129,31 @@ Emdedded_HW02
 
 1.將100,200,300放入r0,r1,r2
 
-![](https://github.com/Hung7/ESEmbedded_HW02/image/1.png)
+![](https://github.com/Hung17/ESEmbedded_HW02/blob/master/images/1.png)
 
 2.將 r0,r1,r2 push進入stack
 
 3.依照sp發現資料向下堆疊到0x200000f4，輸入x 0x200000f4指令確認stack內容
 
-![](https://github.com/Hung7/ESEmbedded_HW02/image/2.png)
+![](https://github.com/Hung17/ESEmbedded_HW02/blob/master/images/2.png)
 
 4.將stack內容pop出來並存入r3,r4,r5
 
-![](https://github.com/Hung7/ESEmbedded_HW02/image/3.png)
+![](https://github.com/Hung17/ESEmbedded_HW02/blob/master/images/3.png)
 
 5.將r3,r4,r5資料清為0，將1,2,3的值存入r0,r1,r2(更換資料觀察stack內資料變化)
 
-![](https://github.com/Hung7/ESEmbedded_HW02/image/4.png)
+![](https://github.com/Hung17/ESEmbedded_HW02/blob/master/images/4.png)
 
 6.改變register順序，將 r2,r0,r1 push進入stack
 
 7.依照sp發現資料向下堆疊到0x200000f4，輸入x 0x200000f4指令確認stack內容
 
-![](https://github.com/Hung7/ESEmbedded_HW02/image/5.png)
+![](https://github.com/Hung17/ESEmbedded_HW02/blob/master/images/5.png)
 
 8.將stack內容pop出來並更改pop順序存入r5	,r4	,r3
 
-![](https://github.com/Hung7/ESEmbedded_HW02/image/6.png)
+![](https://github.com/Hung17/ESEmbedded_HW02/blob/master/images/6.png)
 
 ## 3. 結果與討論
 
@@ -168,7 +168,7 @@ Emdedded_HW02
 	
 
 
-而相反的(step4 and step8)，可以發現不論register的順序，執行pop時，會依照register號碼大小，由小至大，依序將stack位置最低的值的值pop至register
+2.而相反的(step4 and step8)，可以發現不論register的順序，執行pop時，會依照register號碼大小，由小至大，依序將stack位置最低的值的值pop至register
 
 示意 ： Stack是往下長的，pop時,存放資料中位置最低的stack將資料pop出來存入register,存入順序是依據register number大小，由小至大，存入資料
 
